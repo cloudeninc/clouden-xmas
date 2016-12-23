@@ -3,7 +3,7 @@ Kenneth Falck <<kennu@clouden.net>> 2016
 
 This is the source code project for https://xmas.clouden.net. It's probably mostly interesting just to look at.
 
-You probably need to tweak stack/site.yml and stack/api.yml if you want to actually use
+You probably need to tweak stack/site.yml, stack/api.yml and service/serverless.yml if you want to actually use
 the code.
 
 Subfolder descriptions:
