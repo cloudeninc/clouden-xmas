@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  Stage:
+    Description: "Stage"
+    Default: "prod"
+    Type: "String"
+    AllowedValues: ["prod"]
+    ConstraintDescription: "Allowed values: prod"
+  CertArn:
+    Description: "Certificate ARN"
+    Type: "String"
+  ZoneId:
+    Description: "Hosted Zone ID"
+    Type: "String"
+
+Mappings:
+  StageMap:
+    prod:
+      SiteDomain: "xmas.clouden.net"
+      SiteBucket: "clouden-xmas"
+      SiteBucketHost: "clouden-xmas.s3-website-eu-west-1.amazonaws.com"
+
+Resources:
+
+  SiteBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !FindInMap ["StageMap", !Ref Stage, "SiteBucket"]
+      CorsConfiguration:
+        CorsRules:
+          - MaxAge: 3600
+            AllowedHeaders: ["Authorization"]
+            AllowedMethods: ["GET"]
+            AllowedOrigins: ["*"]
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+
+  SiteBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Statement:
+          - Effect: "Allow"
+            Action: "s3:GetObject"
+            Principal:
+              AWS: "*"
+            Resource:
+              "Fn::Join": ["", ["arn:aws:s3:::", !Ref SiteBucket, "/*"]]
+
+  SiteDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Aliases:
+          - !FindInMap ["StageMap", !Ref Stage, "SiteDomain"]
+        Comment: "clouden-xmas site"
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ErrorCachingMinTTL: 60
+        DefaultCacheBehavior:
+          AllowedMethods: ["GET", "HEAD", "OPTIONS"]
+          CachedMethods: ["GET", "HEAD", "OPTIONS"]
+          DefaultTTL: 60
+          MaxTTL: 60
+          MinTTL: 60
+          ForwardedValues:
+            Headers: ["Origin"]
+            QueryString: false
+          TargetOriginId: "Custom-site"
+          ViewerProtocolPolicy: "redirect-to-https"
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertArn
+          SslSupportMethod: "sni-only"
+        Origins:
+          - DomainName: !FindInMap ["StageMap", !Ref Stage, "SiteBucketHost"]
+            CustomOriginConfig:
+              OriginProtocolPolicy: "http-only"
+            Id: "Custom-site"
+
+  SiteRecordSet:
+    Type: "AWS::Route53::RecordSet"
+    Properties:
+      Name: !FindInMap ["StageMap", !Ref Stage, "SiteDomain"]
+      Comment: "clouden-xmas site"
+      HostedZoneId: !Ref ZoneId
+      Type: "A"
+      AliasTarget:
+        DNSName: !GetAtt SiteDistribution.DomainName
+        HostedZoneId: "Z2FDTNDATAQYW2"

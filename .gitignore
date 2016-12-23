@@ -1,0 +1,6 @@
+.DS_Store
+node_modules
+.serverless
+stack/parameters.prod.env
+service/parameters.yml
+thing/*.private.key

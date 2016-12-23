@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  Stage:
+    Description: "Stage"
+    Default: "prod"
+    Type: "String"
+    AllowedValues: ["prod"]
+    ConstraintDescription: "Allowed values: prod"
+  CertArn:
+    Description: "Certificate ARN"
+    Type: "String"
+  ZoneId:
+    Description: "Hosted Zone ID"
+    Type: "String"
+
+Mappings:
+  StageMap:
+    prod:
+      ApiDomain: "xmas-api.clouden.net"
+      ApiOriginHost: "znzm9aw59k.execute-api.eu-west-1.amazonaws.com"
+      ApiOriginPath: "/prod"
+
+Resources:
+
+  ApiDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Aliases:
+          - !FindInMap ["StageMap", !Ref Stage, "ApiDomain"]
+        Comment: "clouden-xmas api"
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ErrorCachingMinTTL: 60
+        DefaultCacheBehavior:
+          AllowedMethods: ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+          CachedMethods: ["GET", "HEAD", "OPTIONS"]
+          DefaultTTL: 60
+          MaxTTL: 60
+          MinTTL: 60
+          ForwardedValues:
+            Headers: ["Origin"]
+            QueryString: false
+          TargetOriginId: "Custom-api"
+          ViewerProtocolPolicy: "redirect-to-https"
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertArn
+          SslSupportMethod: "sni-only"
+        Origins:
+          - DomainName: !FindInMap ["StageMap", !Ref Stage, "ApiOriginHost"]
+            OriginPath: !FindInMap ["StageMap", !Ref Stage, "ApiOriginPath"]
+            CustomOriginConfig:
+              OriginProtocolPolicy: "https-only"
+            Id: "Custom-api"
+
+  ApiRecordSet:
+    Type: "AWS::Route53::RecordSet"
+    Properties:
+      Name: !FindInMap ["StageMap", !Ref Stage, "ApiDomain"]
+      Comment: "clouden-xmas api"
+      HostedZoneId: !Red ZoneId
+      Type: "A"
+      AliasTarget:
+        DNSName: !GetAtt ApiDistribution.DomainName
+        HostedZoneId: "Z2FDTNDATAQYW2"

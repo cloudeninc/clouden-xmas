@@ -1,0 +1,16 @@
+{
+  "name": "clouden-xmas-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:prod": "npm install && sls deploy -s prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "closed",
+  "dependencies": {
+    "es6-promisify": "^5.0.0"
+  }
+}

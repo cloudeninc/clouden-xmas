@@ -1,0 +1,157 @@
+body {
+  background-image: url(../img/winter.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  min-height: 100%;
+  font-family: 'Mandali', sans-serif;
+}
+
+iframe {
+    width: 560px;
+    height: 315px;
+}
+
+#treediv {
+  padding-top: 20px;
+  text-align: center;
+  height: 100vh;
+  overflow-y: scroll;
+  padding-bottom: 140px;
+  max-width: 100%;
+}
+
+h3, .h3 {
+  font-size: 34px;
+  font-weight: bolder;
+  color: #ffffff;
+  font-family: 'Mandali', sans-serif;
+  padding-bottom: 15px;
+}
+
+a {
+    text-decoration: none;
+    color: #147069;
+}
+
+a:hover, a:focus {
+    color: #10423e;
+    text-decoration: none;
+}
+
+.btn-danger {
+}
+
+.btn-primary {
+}
+
+.btn-warning {
+}
+
+.btn-success {
+    color: #fff;
+    background-color: #0f7572;
+    border-color: #4f6160;
+}
+
+.btn-success:hover, .btn-success:focus, .btn-success.focus, .btn-success:active, .btn-success.active, .open>.dropdown-toggle.btn-success {
+    color: #fff;
+    background-color: #005d54;
+    border-color: #164847;
+}
+
+.treeButtons {
+  margin: 20px auto 0px auto;
+}
+
+.treeButtons li {
+  margin: 10px;
+  display: inline-block;
+}
+
+.navbar-brand {
+    font-size: 38px;
+}
+
+.navbar-brand > span {
+    color: #0f7572;
+}
+
+.btn {
+  padding: 20px;
+  font-size: 20px;
+  width: 170px;
+}
+
+footer {
+  font-family: 'Mandali', sans-serif;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #000000;
+  text-align: center;
+}
+
+.social_nav {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.social_nav li a:hover {
+    color: #19726b;
+    border-color: #157069;
+}
+
+#footer {
+  background-color: #000000;
+}
+
+@media(max-width:767px ){
+  .navbar-brand {
+    font-size: 38px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .social_nav {
+    text-align: center;
+  }
+}
+
+@media(max-width:480px ){
+  .navbar-default {
+      background-color: transparent;
+      border-color: transparent;
+      margin-top: 0px;
+      padding: 0px 0px;
+  }
+
+  .container>.navbar-header {
+    margin: 0px;
+  }
+
+  a.navbar-brand {
+    font-size: 20px;
+  }
+
+  footer {
+    position: relative;
+  }
+
+  #footer {
+    padding: 0 0 10px 0;
+  }
+
+  .footer_right {
+    margin-top: 0px;
+  }
+
+  iframe {
+    width: 400px;
+    height: 250px;
+  }
+}
+
+button:focus {outline:0 !important;}

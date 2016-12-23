@@ -1,0 +1,24 @@
+{
+  "name": "clouden-xmas",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:prod:site": "aws --profile clouden cloudformation deploy --stack-name clouden-xmas-site --template-file stack/site.yml --parameter-overrides `cat stack/parameters.prod.env`",
+    "deploy:prod:service": "cd service && npm run deploy:prod",
+    "deploy:prod:api": "aws --profile clouden cloudformation deploy --stack-name clouden-xmas-api --template-file stack/api.yml --parameter-overrides `cat stack/parameters.prod.env`",
+    "deploy:prod:ui": "aws --profile clouden s3 sync ui/ s3://clouden-xmas/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/cloudenoy/clouden-xmas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/cloudenoy/clouden-xmas#readme",
+  "dependencies": {
+    "es6-promisify": "^5.0.0"
+  }
+}
